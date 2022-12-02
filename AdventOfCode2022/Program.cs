@@ -4,7 +4,8 @@
     {
         static async Task Main(string[] args)
         {
-            await new Day1().Run();
+            await Day1.Run();
+            await Day2.Run();
         }
     }
 }

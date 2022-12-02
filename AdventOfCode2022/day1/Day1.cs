@@ -48,13 +48,13 @@ namespace AdventOfCode2022
 
     public class Day1
     {
-        public async Task Run()
+        public static async Task Run()
         {
             Console.WriteLine("Day 1 Part 1: " + await GetPart1());
             Console.WriteLine("Day 1 Part 2: " + await GetPart2());
         }
 
-        public async Task<int> GetPart1()
+        public static async Task<int> GetPart1()
         {
             string[] input = await File.ReadAllLinesAsync("day1/input");
 
@@ -85,7 +85,7 @@ namespace AdventOfCode2022
         In the example above, the top three Elves are the fourth Elf (with 24000 Calories), then the third Elf (with 11000 Calories), then the fifth Elf (with 10000 Calories). The sum of the Calories carried by these three elves is 45000.
         Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
         */
-        public async Task<int> GetPart2()
+        public static async Task<int> GetPart2()
         {
             string[] input = await File.ReadAllLinesAsync("day1/input");
 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AdventOfCode2022": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\dev\\sandbox\\aoc22\\AdventOfCode2022\\AdventOfCode2022"
+    }
+  }
+}
