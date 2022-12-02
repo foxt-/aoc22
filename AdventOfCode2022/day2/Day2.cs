@@ -41,6 +41,7 @@ namespace AdventOfCode2022
         public static async Task Run()
         {
             Console.WriteLine("Day 2 Part 1: " + await GetPart1());
+            Console.WriteLine("Day 2 Part 2: " + await GetPart2());
         }
 
         public static async Task<int> GetPart1()
@@ -50,7 +51,6 @@ namespace AdventOfCode2022
 
             foreach (string line in input)
             {
-                var plays = line.Split(' ');
                 switch (line)
                 {
                     // wins
@@ -74,6 +74,92 @@ namespace AdventOfCode2022
 
                 // X = 88 in ascii
                 score += line.ElementAt(2) - 87;
+            }
+
+            return score;
+        }
+
+        /*
+         --- Part Two ---
+
+        The Elf finishes helping with the tent and sneaks back over to you. "Anyway, the second column says how the round needs to end: X means you need to lose, Y means you need to end the round in a draw, and Z means you need to win. Good luck!"
+
+        The total score is still calculated in the same way, but now you need to figure out what shape to choose so the round ends as indicated. The example above now goes like this:
+
+            - In the first round, your opponent will choose Rock (A), and you need the round to end in a draw (Y), so you also choose Rock. This gives you a score of 1 + 3 = 4.
+            - In the second round, your opponent will choose Paper (B), and you choose Rock so you lose (X) with a score of 1 + 0 = 1.
+            - In the third round, you will defeat your opponent's Scissors with Rock for a score of 1 + 6 = 7.
+
+        Now that you're correctly decrypting the ultra top secret strategy guide, you would get a total score of 12.
+
+        Following the Elf's instructions for the second column, what would your total score be if everything goes exactly according to your strategy guide?
+
+         */
+        public static async Task<int> GetPart2()
+        {
+            // X = loss
+            // Y = draw
+            // Z = win
+
+            string[] input = await File.ReadAllLinesAsync("day2/input");
+            int score = 0;
+
+            foreach (string line in input)
+            {
+                var plays = line.Split(' ');
+
+                switch (plays[1])
+                {
+                    // wins
+                    case "Z":
+                        score += 6;
+                        switch (plays[0])
+                        {
+                            case "A":
+                                score += 2;
+                                break;
+                            case "B":
+                                score += 3;
+                                break;
+                            case "C":
+                                score++;
+                                break;
+                        }
+                        break;
+
+                    // draws
+                    case "Y":
+                        score += 3;
+                        switch (plays[0])
+                        {
+                            case "A":
+                                score++;
+                                break;
+                            case "B":
+                                score += 2;
+                                break;
+                            case "C":
+                                score += 3;
+                                break;
+                        }
+                        break;
+
+                    // losses
+                    case "X":
+                        switch (plays[0])
+                        {
+                            case "A":
+                                score += 3;
+                                break;
+                            case "B":
+                                score++;
+                                break;
+                            case "C":
+                                score += 2;
+                                break;
+                        }
+                        break;
+                }
             }
 
             return score;
