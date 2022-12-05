@@ -70,6 +70,7 @@ namespace AdventOfCode2022
         public static async Task Run()
         {
             Console.WriteLine("Day 5 Part 1: " + await GetPart1());
+            Console.WriteLine("Day 5 Part 2: " + await GetPart2());
         }
 
         public static async Task<string> GetPart1()
@@ -112,6 +113,123 @@ namespace AdventOfCode2022
                     {
                         string item = crates[from - 1].Pop();
                         crates[to - 1].Push(item);
+                    }
+                }
+
+            }
+
+            var solution = new StringBuilder();
+            for (int i = 0; i < CRATE_COUNT; i++)
+                solution.Append(crates[i].Pop());
+
+            return solution.ToString();
+        }
+
+        /*
+         
+         --- Part Two ---
+
+        As you watch the crane operator expertly rearrange the crates, you notice the process isn't following your prediction.
+
+        Some mud was covering the writing on the side of the crane, and you quickly wipe it away. The crane isn't a CrateMover 9000 - it's a CrateMover 9001.
+
+        The CrateMover 9001 is notable for many new and exciting features: air conditioning, leather seats, an extra cup holder, and the ability to pick up and move multiple crates at once.
+
+        Again considering the example above, the crates begin in the same configuration:
+
+            [D]    
+        [N] [C]    
+        [Z] [M] [P]
+         1   2   3 
+
+        Moving a single crate from stack 2 to stack 1 behaves the same as before:
+
+        [D]        
+        [N] [C]    
+        [Z] [M] [P]
+         1   2   3 
+
+        However, the action of moving three crates from stack 1 to stack 3 means that those three moved crates stay in the same order, resulting in this new configuration:
+
+                [D]
+                [N]
+            [C] [Z]
+            [M] [P]
+         1   2   3
+
+        Next, as both crates are moved from stack 2 to stack 1, they retain their order as well:
+
+                [D]
+                [N]
+        [C]     [Z]
+        [M]     [P]
+         1   2   3
+
+        Finally, a single crate is still moved from stack 1 to stack 2, but now it's crate C that gets moved:
+
+                [D]
+                [N]
+                [Z]
+        [M] [C] [P]
+         1   2   3
+
+        In this example, the CrateMover 9001 has put the crates in a totally different order: MCD.
+
+        Before the rearrangement process finishes, update your simulation so that the Elves know where they should stand to be ready to unload the final supplies. After the rearrangement procedure completes, what crate ends up on top of each stack?
+ 
+         */
+        public static async Task<string> GetPart2()
+        {
+            string[] input = await File.ReadAllLinesAsync("day5/input");
+
+            const int CRATE_COUNT = 9;
+            Stack<string>[] crates = new Stack<string>[CRATE_COUNT];
+            for (int i = 0; i < CRATE_COUNT; i++)
+                crates[i] = new Stack<string>();
+
+            var pendingCrates = new Stack<string>();
+            foreach (string line in input)
+            {
+                if (line.StartsWith('['))
+                    pendingCrates.Push(line);
+
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    foreach (var crateLine in pendingCrates)
+                    {
+                        for (int i = 0; i < CRATE_COUNT; i++)
+                        {
+                            int charIndex = i * 4 + 1;
+                            string crate = crateLine.Substring(charIndex, 1);
+                            if (!string.IsNullOrWhiteSpace(crate))
+                                crates[i].Push(crate);
+                        }
+                    }
+                }
+
+                if (line.StartsWith("move"))
+                {
+                    var numbers = line.Split(' ');
+                    var quantity = int.Parse(numbers[1].Trim());
+                    var from = int.Parse(numbers[3].Trim());
+                    var to = int.Parse(numbers[5].Trim());
+
+                    if (quantity == 1)
+                    {
+                        string item = crates[from - 1].Pop();
+                        crates[to - 1].Push(item);
+                    }
+                    else
+                    {
+                        var group = new Stack<string>();
+                        for (int i = 0; i < quantity; i++)
+                        {
+                            string item = crates[from - 1].Pop();
+                            group.Push(item);
+                        }
+
+                        for (int i = 0; i < quantity; i++)
+                            crates[to - 1].Push(group.Pop());
                     }
                 }
 
