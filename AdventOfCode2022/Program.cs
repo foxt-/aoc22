@@ -9,6 +9,7 @@
             await Day3.Run();
             await Day4.Run();
             await Day5.Run();
+            Day6.Run();
         }
     }
 }
